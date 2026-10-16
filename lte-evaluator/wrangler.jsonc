@@ -1,0 +1,25 @@
+{
+  "name": "lte-evaluator",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-14",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // Workers AI binding
+  "ai": {
+    "binding": "AI"
+  },
+
+  // KV namespace for storing uploaded page content
+  "kv_namespaces": [
+    {
+      "binding": "CONTENT_KV",
+      "id": "ba873b3b07d547acbf0c979710dd9695",
+      "preview_id": "d2095d5b030545b09ca4dd1aef07e0a4"
+    }
+  ],
+
+  // Static assets (the frontend)
+  "assets": {
+    "directory": "./public"
+  }
+}
