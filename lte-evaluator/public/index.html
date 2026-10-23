@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interview Preparation Platform</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── Login Gate ── -->
+  <div id="login-gate" hidden>
+    <div class="login-card">
+      <div class="login-logo">IP</div>
+      <h1>Interview Preparation Platform</h1>
+      <p class="login-tagline">Practice · Evaluate · Improve · Succeed</p>
+      <p class="login-desc">
+        Speak your answers to interview questions and receive instant AI-powered
+        feedback with personalised coaching in your own language.
+      </p>
+      <a href="/auth/google" class="btn-google">
+        <svg width="20" height="20" viewBox="0 0 48 48">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.36-8.16 2.36-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        Sign in with Google
+      </a>
+    </div>
+  </div>
+
+  <!-- ── Main App ── -->
+  <div id="app" hidden>
+
+    <header>
+      <div class="brand">
+        <div class="brand-logo">IP</div>
+        <div>
+          <h1>Interview Preparation Platform</h1>
+          <p class="tagline">Practice · Evaluate · Improve · Succeed</p>
+        </div>
+      </div>
+      <div class="user-nav" id="user-nav">
+        <div class="user-info">
+          <img id="user-avatar" src="" alt="" class="user-avatar" hidden />
+          <div class="user-details">
+            <span id="user-name"  class="user-name"></span>
+            <span id="user-email" class="user-email"></span>
+          </div>
+        </div>
+        <div class="user-stats">
+          <span class="stat-label">This month</span>
+          <span id="header-count" class="stat-count">0</span>
+          <span class="stat-label">sessions</span>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="open-stats-btn" type="button">My Stats</button>
+        <button class="btn btn-ghost btn-sm admin-only" id="open-dashboard-btn" type="button" hidden>Dashboard</button>
+        <a href="/auth/logout" class="btn btn-ghost btn-sm">Sign out</a>
+      </div>
+    </header>
+
+    <main>
+
+      <!-- PANEL 1 – Upload Interview Topic Content -->
+      <section class="panel" id="panel-upload">
+        <h2>
+          <span class="step-badge">1</span>
+          Upload Interview Topic <span class="badge badge-admin">Admin</span>
+        </h2>
+        <p class="desc">
+          Upload reference content for an interview topic — ideal answers, concepts,
+          frameworks, or role-specific knowledge that candidates will be evaluated against.
+        </p>
+        <div class="drop-zone" id="content-drop-zone" role="button" tabindex="0"
+             aria-label="Drag and drop topic files here or click to select">
+          <div class="drop-icon-wrap">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="12" y1="18" x2="12" y2="12"/>
+              <line x1="9" y1="15" x2="15" y2="15"/>
+            </svg>
+          </div>
+          <p class="drop-primary">Drag &amp; drop topic files here</p>
+          <p class="drop-sub">Supports .txt, .pdf, .md, images, audio, video</p>
+          <button class="btn btn-outline" id="content-file-btn" type="button">Browse Files</button>
+          <input type="file" id="content-file-input" multiple
+                 accept=".txt,.pdf,.md,.jpg,.jpeg,.png,.gif,.mp4,.mp3,.wav,.webm,.ogg"
+                 style="display:none" />
+        </div>
+        <ul class="file-list" id="content-file-list" aria-live="polite"></ul>
+        <details class="manual-text">
+          <summary>Or paste topic content directly</summary>
+          <div class="manual-text-body">
+            <label for="manual-key">Topic Key (unique ID)</label>
+            <input id="manual-key" type="text" placeholder="e.g. react-hooks, system-design, sql-joins" />
+            <label for="manual-title">Topic Title</label>
+            <input id="manual-title" type="text" placeholder="e.g. React Hooks – Interview Guide" />
+            <label for="manual-content">Ideal Answer / Reference Content</label>
+            <textarea id="manual-content" rows="7" placeholder="Paste the ideal answer, key concepts, frameworks, or any reference material here…"></textarea>
+            <button class="btn btn-primary" id="manual-upload-btn" type="button">Save Topic</button>
+          </div>
+        </details>
+        <div class="upload-actions">
+          <button class="btn btn-primary" id="content-upload-btn" type="button" disabled>Upload Selected Files</button>
+          <button class="btn btn-ghost"   id="content-list-btn"   type="button">View Topics</button>
+        </div>
+        <div id="content-result" class="result-box" hidden></div>
+      </section>
+
+      <!-- PANEL 2 – Practice Interview Answer -->
+      <section class="panel" id="panel-evaluate">
+        <h2>
+          <span class="step-badge">2</span>
+          Practice Your Answer <span class="badge badge-learner">Candidate</span>
+        </h2>
+        <p class="desc">
+          Select an interview topic, then speak your answer as you would in a real interview.
+          The AI will evaluate your response and give you instant coaching feedback.
+        </p>
+
+        <!-- Topic selector -->
+        <div class="field-row">
+          <label for="eval-content-key">Interview topic</label>
+          <input id="eval-content-key" type="text" placeholder="Topic key (leave empty to use all)" />
+          <button class="btn btn-ghost btn-sm" id="refresh-keys-btn" type="button">Browse Topics</button>
+        </div>
+
+        <!-- Language -->
+        <div class="field-row">
+          <label for="lang-hint">Your language</label>
+          <select id="lang-hint">
+            <option value="">Auto-detect</option>
+            <option value="en">English</option>
+            <option value="hi">Hindi (हिंदी)</option>
+            <option value="fr">French (Français)</option>
+            <option value="de">German (Deutsch)</option>
+            <option value="es">Spanish (Español)</option>
+            <option value="ar">Arabic (العربية)</option>
+            <option value="zh">Chinese (中文)</option>
+            <option value="pt">Portuguese (Português)</option>
+            <option value="ta">Tamil (தமிழ்)</option>
+            <option value="te">Telugu (తెలుగు)</option>
+            <option value="bn">Bengali (বাংলা)</option>
+            <option value="ur">Urdu (اردو)</option>
+            <option value="id">Indonesian</option>
+            <option value="ja">Japanese (日本語)</option>
+            <option value="ko">Korean (한국어)</option>
+            <option value="ru">Russian (Русский)</option>
+            <option value="it">Italian (Italiano)</option>
+            <option value="th">Thai (ภาษาไทย)</option>
+          </select>
+        </div>
+
+        <!-- Audio input -->
+        <div class="audio-input-area">
+          <div class="recorder-card">
+            <div class="recorder-status" id="rec-status" aria-live="polite">Ready to record</div>
+            <div class="recorder-timer"  id="rec-timer"  aria-live="polite">0:00</div>
+            <div class="recorder-controls">
+              <button class="btn btn-record" id="rec-start-btn" type="button" aria-label="Start recording">Record Answer</button>
+              <button class="btn btn-stop"   id="rec-stop-btn"  type="button" disabled aria-label="Stop recording">Stop</button>
+            </div>
+            <audio id="rec-playback" controls hidden></audio>
+          </div>
+          <div class="divider-or">or</div>
+          <div class="drop-zone drop-zone-sm" id="audio-drop-zone" role="button" tabindex="0">
+            <div class="drop-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 18V5l12-2v13"/>
+                <circle cx="6" cy="18" r="3"/>
+                <circle cx="18" cy="16" r="3"/>
+              </svg>
+            </div>
+            <p class="drop-primary">Drop audio file</p>
+            <p class="drop-sub">MP3, WAV, WebM, OGG – max 2 MB</p>
+            <button class="btn btn-outline btn-sm" id="audio-file-btn" type="button">Browse</button>
+            <input type="file" id="audio-file-input" accept="audio/*" style="display:none" />
+          </div>
+        </div>
+
+        <div id="selected-audio-label" class="selected-label" hidden></div>
+
+        <button class="btn btn-primary btn-lg" id="evaluate-btn" type="button" disabled>
+          Evaluate My Answer
+        </button>
+
+        <div class="progress-steps" id="progress-steps" hidden aria-live="polite">
+          <div class="step" id="step-transcribe">Transcribing your answer...</div>
+          <div class="step" id="step-evaluate">Analysing interview readiness...</div>
+          <div class="step" id="step-speak">Generating coaching feedback...</div>
+        </div>
+      </section>
+
+      <!-- PANEL 3 – Evaluation Results -->
+      <section class="panel panel-results" id="panel-results" hidden>
+        <h2>Interview Readiness Report</h2>
+
+        <div class="score-section">
+          <div class="score-label">Answer Score</div>
+          <div class="score-bar-wrap">
+            <div class="score-bar" id="score-bar"></div>
+            <span class="score-value" id="score-value">0%</span>
+          </div>
+          <div class="understanding-badge" id="understanding-badge"></div>
+        </div>
+
+        <div class="result-card">
+          <h3>What You Said</h3>
+          <p id="result-transcript" class="transcript-text"></p>
+          <p class="meta-row">Language detected: <strong id="result-lang"></strong></p>
+        </div>
+        <div class="result-card result-card-good">
+          <h3>Strong Points</h3>
+          <ul id="result-strong" class="tag-list"></ul>
+        </div>
+        <div class="result-card result-card-warn">
+          <h3>Weak Points</h3>
+          <ul id="result-weak" class="tag-list"></ul>
+        </div>
+        <div class="result-card result-card-info">
+          <h3>Missing Concepts</h3>
+          <ul id="result-missing" class="tag-list"></ul>
+        </div>
+        <div class="result-card result-card-conclusion">
+          <h3>Coach Feedback</h3>
+          <p id="result-conclusion"></p>
+        </div>
+
+        <div class="audio-feedback" id="audio-feedback-section" hidden>
+          <h3>Listen to Coaching Feedback</h3>
+          <audio id="feedback-audio" controls></audio>
+          <button class="btn btn-outline btn-sm" id="download-audio-btn" type="button">Download Audio</button>
+        </div>
+
+        <div class="result-actions">
+          <button class="btn btn-primary" id="start-followup-btn" type="button">Start Drill Questions</button>
+          <button class="btn btn-ghost"   id="try-again-btn"      type="button">Try Again</button>
+        </div>
+      </section>
+
+      <!-- PANEL 4 – Follow-up Drill Questions -->
+      <section class="panel panel-followup" id="panel-followup" hidden>
+        <h2>
+          <span class="step-badge">3</span>
+          Drill Questions
+          <span class="badge badge-learner">Round <span id="followup-round-num">1</span></span>
+        </h2>
+        <p class="desc" id="followup-encouragement">Deepen your knowledge with targeted questions.</p>
+
+        <div class="followup-q">
+          <label class="fq-label" id="fq-label-1"></label>
+          <textarea class="fq-answer" id="fq-answer-1" rows="3" placeholder="Type your answer here..."></textarea>
+        </div>
+        <div class="followup-q">
+          <label class="fq-label" id="fq-label-2"></label>
+          <textarea class="fq-answer" id="fq-answer-2" rows="3" placeholder="Type your answer here..."></textarea>
+        </div>
+
+        <button class="btn btn-primary btn-lg" id="submit-followup-btn" type="button">Submit Answers</button>
+
+        <div id="followup-result" hidden>
+          <div class="result-card result-card-good">
+            <h3>Improved Areas</h3>
+            <ul id="followup-improved" class="tag-list"></ul>
+          </div>
+          <div class="result-card result-card-warn">
+            <h3>Still Needs Work</h3>
+            <ul id="followup-still-weak" class="tag-list"></ul>
+          </div>
+          <div class="result-card result-card-conclusion">
+            <h3>Drill Feedback</h3>
+            <p id="followup-summary"></p>
+          </div>
+          <div class="audio-feedback" id="followup-audio-section" hidden>
+            <h3>Listen to Feedback</h3>
+            <audio id="followup-audio" controls></audio>
+          </div>
+          <div id="more-questions-prompt" class="more-q-prompt" hidden>
+            <p>You have more areas to improve. Would you like another round of questions?</p>
+            <div class="more-q-actions">
+              <button class="btn btn-primary" id="yes-more-btn" type="button">Yes, give me more questions</button>
+              <button class="btn btn-ghost"   id="no-more-btn"  type="button">No, I am done for now</button>
+            </div>
+          </div>
+          <div id="followup-done-msg" class="done-msg" hidden>
+            Session complete. Check your stats to track progress.
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL 5 – My Stats -->
+      <section class="panel panel-stats" id="panel-stats" hidden>
+        <h2>My Practice Stats</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-num" id="stat-this-month">–</div>
+            <div class="stat-desc">This month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="stat-all-time">–</div>
+            <div class="stat-desc">All time</div>
+          </div>
+        </div>
+        <h3 class="recent-title">Recent Sessions</h3>
+        <table class="recent-table">
+          <thead>
+            <tr><th>Date</th><th>Score</th><th>Readiness</th><th>Language</th><th>Drills</th></tr>
+          </thead>
+          <tbody id="recent-tbody"></tbody>
+        </table>
+        <div class="result-actions">
+          <button class="btn btn-ghost" id="hide-stats-btn" type="button">Close</button>
+        </div>
+      </section>
+
+      <!-- PANEL 6 – Admin Dashboard -->
+      <section class="panel panel-dashboard" id="panel-dashboard" hidden>
+        <h2>Admin Dashboard</h2>
+
+        <!-- Summary cards -->
+        <div class="stats-grid" id="dash-summary"></div>
+
+        <!-- Tabs -->
+        <div class="dash-tabs">
+          <button class="dash-tab active" data-tab="users">Users</button>
+          <button class="dash-tab" data-tab="logins">Login History</button>
+          <button class="dash-tab" data-tab="usage">Usage Log</button>
+          <button class="dash-tab" data-tab="monthly">Monthly Counts</button>
+        </div>
+
+        <div id="dash-tab-users" class="dash-tab-panel">
+          <table class="recent-table">
+            <thead><tr><th>Email</th><th>Name</th></tr></thead>
+            <tbody id="dash-users-tbody"></tbody>
+          </table>
+        </div>
+        <div id="dash-tab-logins" class="dash-tab-panel" hidden>
+          <table class="recent-table">
+            <thead><tr><th>Email</th><th>Logged In At</th></tr></thead>
+            <tbody id="dash-logins-tbody"></tbody>
+          </table>
+        </div>
+        <div id="dash-tab-usage" class="dash-tab-panel" hidden>
+          <table class="recent-table">
+            <thead><tr><th>Email</th><th>Used At</th><th>Action</th></tr></thead>
+            <tbody id="dash-usage-tbody"></tbody>
+          </table>
+        </div>
+        <div id="dash-tab-monthly" class="dash-tab-panel" hidden>
+          <table class="recent-table">
+            <thead><tr><th>Email</th><th>Year</th><th>Month</th><th>Count</th></tr></thead>
+            <tbody id="dash-monthly-tbody"></tbody>
+          </table>
+        </div>
+
+        <div class="result-actions" style="margin-top:20px">
+          <button class="btn btn-ghost" id="hide-dashboard-btn" type="button">Close</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Topics modal -->
+  <div class="modal-overlay" id="content-modal-overlay" role="dialog" aria-modal="true" aria-label="Interview topics">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Interview Topics</h3>
+        <button class="modal-close" id="modal-close-btn" aria-label="Close">&#x2715;</button>
+      </div>
+      <div class="modal-body">
+        <ul id="stored-keys-list" class="keys-list"></ul>
+        <p id="no-keys-msg" hidden>No topics uploaded yet.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

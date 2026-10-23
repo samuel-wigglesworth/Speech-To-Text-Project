@@ -1,0 +1,52 @@
+{
+  "name": "lte-evaluator",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-14",
+  "compatibility_flags": ["nodejs_compat"],
+
+  "ai": { "binding": "AI" },
+
+  // Original content store
+  "kv_namespaces": [
+    {
+      "binding": "CONTENT_KV",
+      "id": "ba873b3b07d547acbf0c979710dd9695",
+      "preview_id": "d2095d5b030545b09ca4dd1aef07e0a4"
+    },
+    // user_master: email (PK) → { email, user_name }
+    {
+      "binding": "USER_MASTER_KV",
+      "id": "6187221989bf4689992afff181473c22",
+      "preview_id": "6187221989bf4689992afff181473c22"
+    },
+    // user_logs: login events — key = email:timestamp
+    {
+      "binding": "USER_LOGS_KV",
+      "id": "d620510a01d146bcb7980384bb7b8be4",
+      "preview_id": "d620510a01d146bcb7980384bb7b8be4"
+    },
+    // usage_logs: app usage events — key = email:timestamp
+    {
+      "binding": "USAGE_LOGS_KV",
+      "id": "12b9283fd121454ea146d8efbec0d80b",
+      "preview_id": "12b9283fd121454ea146d8efbec0d80b"
+    }
+  ],
+
+  // D1: users, monthly_counts, sessions
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "lte-db",
+      "database_id": "b4ca93e5-524a-43fe-b9d5-41cd5ffdf7f1"
+    }
+  ],
+
+  "vars": {
+    "GOOGLE_CLIENT_ID": "237616787907-m8mlka2m60o6mj0q8v2hr4lv7gdgduc4.apps.googleusercontent.com",
+    "COOKIE_SECRET":    "nOjPXjovjQVNlNJ5MxRhRdqSvaeSB+2Q",
+    "APP_URL":          "https://lte-evaluator.c-samuelwigglesworth.workers.dev"
+  },
+
+  "assets": { "directory": "./public" }
+}
